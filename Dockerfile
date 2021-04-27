@@ -1,19 +1,37 @@
-FROM linuxbrew/brew
+FROM node:12-slim
 SHELL ["/bin/bash", "-c"]
 WORKDIR /root
-RUN brew install node
-RUN brew install protobuf
+RUN apt update
+RUN apt install -y unzip curl
+
+# Install protoc
+RUN curl -L https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/protoc-3.15.8-linux-x86_64.zip --output /tmp/protoc.zip
+RUN unzip /tmp/protoc.zip -d /usr/local
+
+# Install node generation deps
 RUN npm update
-RUN npm install -g grpc-tools
-RUN npm install -g ts-proto
-RUN brew tap bufbuild/buf
-RUN brew install buf
+RUN npm install -g grpc-tools ts-proto --unsafe-perm
+
+# Install Buf
+RUN curl -L https://github.com/bufbuild/buf/releases/download/v0.41.0/buf-Linux-x86_64.tar.gz --output /tmp/buf.tar.gz
+RUN tar -xzf /tmp/buf.tar.gz -C /usr/local --strip-components=1
+
 # Installing go and dependencies
-RUN curl -o /tmp/go1.16.2.linux-amd64.tar.gz https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf /tmp/go1.16.2.linux-amd64.tar.gz
-RUN rm /tmp/go1.16.2.linux-amd64.tar.gz
-RUN echo 'PATH=/root/go/bin:/usr/local/go/bin:$PATH' >>~/.profile
+RUN curl https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz --output /tmp/go.tar.gz
+RUN tar -C /usr/local -xzf /tmp/go.tar.gz
+#RUN echo 'PATH=/root/go/bin:/usr/local/go/bin:$PATH' >>~/.profile
+ENV PATH="/root/go/bin:/usr/local/go/bin:${PATH}"
 RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+# ===== Cleanup =====
+RUN apt clean
+RUN rm /tmp/protoc.zip
+RUN rm /tmp/buf.tar.gz
+RUN rm /tmp/go.tar.gz
+RUN apt remove -y unzip curl
+RUN apt autoremove -y
+
+
