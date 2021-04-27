@@ -19,7 +19,6 @@ RUN tar -xzf /tmp/buf.tar.gz -C /usr/local --strip-components=1
 # Installing go and dependencies
 RUN curl https://dl.google.com/go/go1.16.2.linux-amd64.tar.gz --output /tmp/go.tar.gz
 RUN tar -C /usr/local -xzf /tmp/go.tar.gz
-#RUN echo 'PATH=/root/go/bin:/usr/local/go/bin:$PATH' >>~/.profile
 ENV PATH="/root/go/bin:/usr/local/go/bin:${PATH}"
 RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
