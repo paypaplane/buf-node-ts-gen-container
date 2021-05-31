@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+option go_package = "services/metadata/v1;services__metadata__v1";
+
+import "google/api/annotations.proto";
+
+package services.metadata.v1;
+
+message Metadata {
+  // Ignored in creation requests and replaced by a generated yoikId
+  string id = 1;
+  // The schema for the JSON data, must already exist in schemas
+  string type = 2;
+  // JSON String
+  string data = 3;
+}
+
+message MetadataServiceCreateRequest {
+  Metadata metadata = 1;
+}
+
+message MetadataServiceCreateResponse {
+  Metadata metadata = 1;
+}
+
+message MetadataServiceFindAllRequest {
+  int32 skip = 1;
+  int32 limit = 2;
+  repeated string search_ids = 3;
+}
+
+message MetadataServiceFindAllResponse {
+  repeated Metadata items = 1;
+}
+
+message MetadataServiceGetRequest {
+  string metadata_id = 1;
+}
+
+message MetadataServiceGetResponse {
+  Metadata metadata = 1;
+}
+
+message MetadataServiceRemoveRequest {
+  string metadata_id = 1;
+}
+
+message MetadataServiceRemoveResponse {
+}
+
+message MetadataServiceUpdateRequest {
+  Metadata metadata = 1;
+}
+
+message MetadataServiceUpdateResponse {
+  Metadata metadata = 1;
+}
+
+// The metadata service handles CRUD operation for metadata objects
+service MetadataService {
+  rpc Create(MetadataServiceCreateRequest) returns (MetadataServiceCreateResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/metadataservice/create"
+      body: "*"
+    };
+  }
+  rpc Get(MetadataServiceGetRequest) returns (MetadataServiceGetResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/metadataservice/get"
+      body: "*"
+    };
+  }
+  rpc FindAll(MetadataServiceFindAllRequest) returns (MetadataServiceFindAllResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/metadataservice/findall"
+      body: "*"
+    };
+  }
+  rpc Remove(MetadataServiceRemoveRequest) returns (MetadataServiceRemoveResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/metadataservice/remove"
+      body: "*"
+    };
+  }
+  rpc Update(MetadataServiceUpdateRequest) returns (MetadataServiceUpdateResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/metadataservice/update"
+      body: "*"
+    };
+  }
+}

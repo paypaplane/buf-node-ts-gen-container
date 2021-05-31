@@ -1,0 +1,1 @@
+docker build . -f Dockerfile -t "protango/buf-node-ts-gen:latest"

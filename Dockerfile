@@ -10,7 +10,7 @@ RUN unzip /tmp/protoc.zip -d /usr/local
 
 # Install node generation deps
 RUN npm update
-RUN npm install -g grpc-tools ts-proto --unsafe-perm
+RUN npm install -g grpc-tools ts-proto typescript --unsafe-perm
 
 # Install Buf
 RUN curl -L https://github.com/bufbuild/buf/releases/download/v0.41.0/buf-Linux-x86_64.tar.gz --output /tmp/buf.tar.gz
@@ -24,6 +24,10 @@ RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+# Install git
+RUN apt update
+RUN apt install -y git
 
 # ===== Cleanup =====
 RUN apt clean

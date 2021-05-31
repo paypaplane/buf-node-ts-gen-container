@@ -1,0 +1,8 @@
+FROM protango/buf-node-ts-gen:latest
+SHELL ["/bin/bash", "-c"]
+WORKDIR /root/buf-test
+COPY test-files/buf.yaml ./
+COPY test-files/buf.gen.yaml ./
+COPY test-files/proto ./proto
+RUN buf beta mod update
+CMD buf generate

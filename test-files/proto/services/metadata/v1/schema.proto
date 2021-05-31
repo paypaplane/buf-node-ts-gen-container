@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option go_package = "services/metadata/v1;services__metadata__v1";
+
+import "google/api/annotations.proto";
+
+package services.metadata.v1;
+
+message Schema {
+  string type = 1;
+  // JSON String
+  string schema = 2;
+}
+
+message SchemaServiceCreateRequest {
+  Schema schema = 1;
+}
+
+message SchemaServiceCreateResponse {
+  Schema schema = 1;
+}
+
+message SchemaServiceGetRequest {
+  string type = 1;
+}
+
+message SchemaServiceGetResponse {
+  Schema schema = 1;
+}
+
+message SchemaServiceGetAllRequest {
+  int32 skip = 1;
+  int32 limit = 2;
+}
+
+message SchemaServiceGetAllResponse {
+  int32 count = 1;
+  repeated Schema rows = 2;
+}
+
+// The schema service handles the creation and retrieval of schemas that can be later used to validate metadata objects
+service SchemaService {
+  rpc Create(SchemaServiceCreateRequest) returns (SchemaServiceCreateResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/schemaservice/create"
+      body: "*"
+    };
+  }
+  rpc Get(SchemaServiceGetRequest) returns (SchemaServiceGetResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/schemaservice/get"
+      body: "*"
+    };
+  }
+  rpc GetAll(SchemaServiceGetAllRequest) returns (SchemaServiceGetAllResponse) {
+    option (google.api.http) = {
+      post: "/api/metadata/schemaservice/getall"
+      body: "*"
+    };
+  }
+}
