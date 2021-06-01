@@ -1,8 +1,11 @@
-FROM node:12-slim
+FROM debian:10-slim
 SHELL ["/bin/bash", "-c"]
 WORKDIR /root
-RUN apt update
-RUN apt install -y unzip curl
+RUN apt update && apt install -y unzip curl make git 
+
+# Install node
+RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
 
 # Install protoc
 RUN curl -L https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/protoc-3.15.8-linux-x86_64.zip --output /tmp/protoc.zip
@@ -10,7 +13,7 @@ RUN unzip /tmp/protoc.zip -d /usr/local
 
 # Install node generation deps
 RUN npm update
-RUN npm install -g grpc-tools ts-proto typescript --unsafe-perm
+RUN npm install -g grpc-tools ts-proto typescript yarn --unsafe-perm
 
 # Install Buf
 RUN curl -L https://github.com/bufbuild/buf/releases/download/v0.41.0/buf-Linux-x86_64.tar.gz --output /tmp/buf.tar.gz
