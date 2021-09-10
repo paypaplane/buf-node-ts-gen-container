@@ -37,7 +37,7 @@ RUN apt clean
 RUN rm /tmp/protoc.zip
 RUN rm /tmp/buf.tar.gz
 RUN rm /tmp/go.tar.gz
-RUN apt remove -y unzip curl
+RUN apt remove -y unzip
 RUN apt autoremove -y
 
 
